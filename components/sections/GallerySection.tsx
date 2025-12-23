@@ -12,15 +12,15 @@ const photos = [
   '/images/62457fbe49ee52d70677afcb805da99303541530.png',
   '/images/b5a8eecdebdf1c271602d8880c2a8a68d49c08d6.png',
   '/images/7798b690540feee8f5b0182440c203dfb4f02a25.png',
+  '/images/0a41fbc2bc69d14dec3e2adea3d82aa882bbdf2b.png',
   '/images/925f3a3a87379c80d6f3142ed96b6726b36cf0f8.png',
+  '/images/464d1cdf89768ad54b044cd95c1e22551393f48c.png',
   '/images/2d9599f260dfd552885c57189ec2f8fac9a46dc0.png',
   '/images/1e2bc1bd43b6993b664ab500df653ba43e87b04b.png',
   '/images/c40fbc63d505fe6449417d9a15f3c9143e82ba1f.png',
   '/images/38677bdcf18c20c9e0e9456f2a634b25305241af.png',
   '/images/ac0f2f9ab094708d8bd17bbb686ca42f31f6d811.png',
   '/images/5e2339ca7508f7783bf3f6b1795903e78cc15730.png',
-  '/images/0a41fbc2bc69d14dec3e2adea3d82aa882bbdf2b.png',
-  '/images/464d1cdf89768ad54b044cd95c1e22551393f48c.png',
   '/images/55eca80d5f1b5270334a45fc9636ef2306ee4375.png',
 ];
 
