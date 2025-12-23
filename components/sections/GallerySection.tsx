@@ -19,7 +19,9 @@ const photos = [
   '/images/38677bdcf18c20c9e0e9456f2a634b25305241af.png',
   '/images/ac0f2f9ab094708d8bd17bbb686ca42f31f6d811.png',
   '/images/5e2339ca7508f7783bf3f6b1795903e78cc15730.png',
-  '/images/aff40174b95f11457f9eda88d846205da4ebfaff.png',
+  '/images/0a41fbc2bc69d14dec3e2adea3d82aa882bbdf2b.png',
+  '/images/464d1cdf89768ad54b044cd95c1e22551393f48c.png',
+  '/images/55eca80d5f1b5270334a45fc9636ef2306ee4375.png',
 ];
 
 export default function GallerySection() {
