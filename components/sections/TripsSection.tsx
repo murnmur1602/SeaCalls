@@ -10,7 +10,7 @@ const trips = [
   {
     id: 1,
     image:
-      '/images/abb83e2ba131e055681fb6d9d526cc2cfddb2dad.png',
+      'https://images.unsplash.com/photo-1654528420969-001d8041b3c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Таиланд',
     region: 'Пхукет и острова',
     dates: '14-21 марта 2026',
@@ -21,7 +21,7 @@ const trips = [
   {
     id: 2,
     image:
-      '/images/c826716aaac1596962a0c9adb69e01002a32d9b4.png',
+      'https://images.unsplash.com/photo-1731285534506-6d1c65cfa6bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Сейшелы',
     region: 'Внутренние острова',
     dates: '28 марта - 4 апреля 2026',
@@ -32,7 +32,7 @@ const trips = [
   {
     id: 3,
     image:
-      '/images/f65fc889002f38cbc9b37dedd8e13dbc582f9fee.png',
+      'https://images.unsplash.com/photo-1571205350653-8e908c22c161?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Турция',
     region: 'Разведка чартер Мармарис',
     dates: '18-25 апреля 2026',
@@ -43,7 +43,7 @@ const trips = [
   {
     id: 4,
     image:
-      '/images/af21f700576bff6493469285dbee9a0e38057bb1.png',
+      'https://images.unsplash.com/photo-1571205350653-8e908c22c161?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Турция',
     region: 'Средиземноморье',
     dates: '30 мая - 6 июня 2026',
@@ -54,7 +54,7 @@ const trips = [
   {
     id: 5,
     image:
-      '/images/83b228c04a172651f9b214cab71ff7942ba0d07c.png',
+      'https://images.unsplash.com/photo-1600945193297-91742f3cd29e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Черногория',
     region: 'Бока-Которская бухта',
     dates: '13-20 июня 2026',
@@ -65,7 +65,7 @@ const trips = [
   {
     id: 6,
     image:
-      '/images/62457fbe49ee52d70677afcb805da99303541530.png',
+      'https://images.unsplash.com/photo-1682639265597-52ab6a5a0988?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Азорские острова',
     region: 'Португалия',
     dates: '11-18 июля и 18-25 июля 2026',
@@ -77,7 +77,7 @@ const trips = [
   {
     id: 7,
     image:
-      '/images/b5a8eecdebdf1c271602d8880c2a8a68d49c08d6.png',
+      'https://images.unsplash.com/photo-1651833170175-688b98dabd00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Липарские острова',
     region: 'Сицилия',
     dates: '5-12 сентября 2026',
@@ -88,7 +88,7 @@ const trips = [
   {
     id: 8,
     image:
-      '/images/7798b690540feee8f5b0182440c203dfb4f02a25.png',
+      'https://images.unsplash.com/photo-1571205350653-8e908c22c161?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Турция',
     region: 'Средиземноморье',
     dates: 'Октябрь 2026',
@@ -100,7 +100,7 @@ const trips = [
   {
     id: 9,
     image:
-      '/images/925f3a3a87379c80d6f3142ed96b6726b36cf0f8.png',
+      'https://images.unsplash.com/photo-1645189965761-a2d2aedbbcaa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Маврикий',
     region: 'Индийский океан',
     dates: 'Октябрь 2026',
@@ -113,7 +113,7 @@ const trips = [
   {
     id: 10,
     image:
-      '/images/2d9599f260dfd552885c57189ec2f8fac9a46dc0.png',
+      'https://images.unsplash.com/photo-1731285534506-6d1c65cfa6bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
     country: 'Сейшелы',
     region: 'Внутренние острова',
     dates: 'Ноябрь 2026',

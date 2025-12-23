@@ -92,7 +92,7 @@ export default function TripDetail({ onBack }: TripDetailProps) {
         {/* Hero Section */}
         <section className="relative h-[60vh] min-h-[500px] overflow-hidden">
           <Image
-            src="/images/abb83e2ba131e055681fb6d9d526cc2cfddb2dad.png"
+            src="https://images.unsplash.com/photo-1654528420969-001d8041b3c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80"
             alt="Таиланд"
             fill
             className="object-cover"
