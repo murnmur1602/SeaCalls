@@ -1,7 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
+const ResponsiveMasonry = dynamic(
+  () => import("react-responsive-masonry").then((mod) => mod.ResponsiveMasonry),
+  { ssr: false }
+);
+
+const Masonry = dynamic(
+  () => import("react-responsive-masonry").then((mod) => mod.default),
+  { ssr: false }
+);
 
 const photos = [
   "/images/abb83e2ba131e055681fb6d9d526cc2cfddb2dad.png",
@@ -24,20 +35,20 @@ const photos = [
   "/images/55eca80d5f1b5270334a45fc9636ef2306ee4375.png",
 ];
 
-// Статичная сетка с фиксированными размерами для каждой позиции
+// Статичная сетка для мобильных с фиксированными размерами
 const gridLayout = [
-  { size: "tall", span: "row-span-2" }, // 0: высокая
-  { size: "square", span: "row-span-1" }, // 1: квадратная
-  { size: "tall", span: "row-span-2" }, // 2: высокая
-  { size: "square", span: "row-span-1" }, // 3: квадратная
-  { size: "wide", span: "row-span-1" }, // 4: широкая
-  { size: "square", span: "row-span-1" }, // 5: квадратная
-  { size: "tall", span: "row-span-2" }, // 6: высокая
-  { size: "square", span: "row-span-1" }, // 7: квадратная
-  { size: "square", span: "row-span-1" }, // 8: квадратная
+  { size: "tall", span: "row-span-2" },
+  { size: "square", span: "row-span-1" },
+  { size: "tall", span: "row-span-2" },
+  { size: "square", span: "row-span-1" },
+  { size: "wide", span: "row-span-1" },
+  { size: "square", span: "row-span-1" },
+  { size: "tall", span: "row-span-2" },
+  { size: "square", span: "row-span-1" },
+  { size: "square", span: "row-span-1" },
 ];
 
-const ROTATION_INTERVAL = 4000; // Меняем каждые 4 секунды
+const ROTATION_INTERVAL = 4000;
 
 export default function GallerySection() {
   const [photoIndices, setPhotoIndices] = useState(() =>
@@ -46,14 +57,29 @@ export default function GallerySection() {
   const [lastChangedPosition, setLastChangedPosition] = useState<number | null>(
     null
   );
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Определяем мобильное устройство
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Ротация только для мобильных
+  useEffect(() => {
+    if (!isMobile) return;
+
     const interval = setInterval(() => {
       setPhotoIndices((prev) => {
         const newIndices = [...prev];
         let positionToChange;
 
-        // Выбираем позицию, отличную от последней измененной
         do {
           positionToChange = Math.floor(Math.random() * gridLayout.length);
         } while (
@@ -64,7 +90,6 @@ export default function GallerySection() {
         setLastChangedPosition(positionToChange);
 
         let newPhotoIndex;
-        // Находим фото, которое не отображается сейчас
         do {
           newPhotoIndex = Math.floor(Math.random() * photos.length);
         } while (newIndices.includes(newPhotoIndex));
@@ -75,7 +100,7 @@ export default function GallerySection() {
     }, ROTATION_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [lastChangedPosition]);
+  }, [lastChangedPosition, isMobile]);
 
   return (
     <section id="gallery" className="pt-20 md:pt-28 px-5 md:px-6 relative">
@@ -92,27 +117,52 @@ export default function GallerySection() {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Статичная CSS Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] gap-3 md:gap-4">
-          {gridLayout.map((cell, position) => {
-            const photoIndex = photoIndices[position];
+        {/* Мобильная версия - статичная сетка с анимацией */}
+        <div className="block md:hidden">
+          <div className="grid grid-cols-2 auto-rows-[200px] gap-3">
+            {gridLayout.map((cell, position) => {
+              const photoIndex = photoIndices[position];
 
-            return (
-              <div
-                key={`cell-${position}`}
-                className={`relative ${cell.span} rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 group`}
-              >
-                <Image
-                  key={`photo-${photoIndex}`}
-                  src={photos[photoIndex]}
-                  alt={`Sailing adventure ${photoIndex + 1}`}
-                  fill
-                  className="object-cover group-hover:scale-105 animate-fadeIn"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                />
-              </div>
-            );
-          })}
+              return (
+                <div
+                  key={`cell-${position}`}
+                  className={`relative ${cell.span} rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 group`}
+                >
+                  <Image
+                    key={`photo-${photoIndex}`}
+                    src={photos[photoIndex]}
+                    alt={`Sailing adventure ${photoIndex + 1}`}
+                    fill
+                    className="object-cover group-hover:scale-105 animate-fadeIn"
+                    sizes="50vw"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Десктопная версия - Masonry Grid */}
+        <div className="hidden md:block">
+          <ResponsiveMasonry columnsCountBreakPoints={{ 768: 3, 1024: 4 }}>
+            <Masonry gutter="10px">
+              {photos.map((photo, index) => (
+                <div
+                  key={index}
+                  className="relative w-full rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <Image
+                    src={photo}
+                    alt={`Sailing adventure ${index + 1}`}
+                    width={600}
+                    height={800}
+                    className="w-full h-auto object-cover"
+                    sizes="(max-width: 1024px) 33vw, 25vw"
+                  />
+                </div>
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
         </div>
       </div>
     </section>
