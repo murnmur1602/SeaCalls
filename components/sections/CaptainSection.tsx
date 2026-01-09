@@ -96,7 +96,9 @@ export default function CaptainSection() {
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-2">
                   <a
-                    href="#"
+                    href="https://t.me/sea_calls_me"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 text-white px-6 md:px-8 py-3 rounded-lg transition-colors border border-white/20 font-manrope font-normal tracking-wider text-sm"
                   >
                     <svg
@@ -114,7 +116,9 @@ export default function CaptainSection() {
                     Telegram-канал
                   </a>
                   <a
-                    href="#"
+                    href="https://instagram.com/nastya.bulygina"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 text-white px-6 md:px-8 py-3 rounded-lg transition-colors border border-white/20 font-manrope font-normal tracking-wider text-sm"
                   >
                     <svg
