@@ -1,18 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const ResponsiveMasonry = dynamic(
-  () => import("react-responsive-masonry").then((mod) => mod.ResponsiveMasonry),
-  { ssr: false }
-);
-
-const Masonry = dynamic(
-  () => import("react-responsive-masonry").then((mod) => mod.default),
-  { ssr: false }
-);
+interface ColumnItem {
+  src: string;
+  ratio: number;
+}
 
 const photos = [
   "/images/abb83e2ba131e055681fb6d9d526cc2cfddb2dad.png",
@@ -58,17 +52,25 @@ export default function GallerySection() {
     null
   );
   const [isMobile, setIsMobile] = useState(false);
+  const [columnsCount, setColumnsCount] = useState(3);
+  const [photoMeta, setPhotoMeta] = useState<{ src: string; ratio: number }[]>(
+    []
+  );
+  const [desktopColumns, setDesktopColumns] = useState<ColumnItem[][]>([]);
+  const desktopContainerRef = useRef<HTMLDivElement>(null);
 
   // Определяем мобильное устройство
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkViewport = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setColumnsCount(width >= 1024 ? 4 : 3);
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    checkViewport();
+    window.addEventListener("resize", checkViewport);
 
-    return () => window.removeEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkViewport);
   }, []);
 
   // Ротация только для мобильных
@@ -101,6 +103,72 @@ export default function GallerySection() {
 
     return () => clearInterval(interval);
   }, [lastChangedPosition, isMobile]);
+
+  // Собираем соотношения сторон для балансировки столбцов на десктопе
+  useEffect(() => {
+    if (isMobile) return;
+
+    let cancelled = false;
+
+    const loadMeta = async () => {
+      const entries = await Promise.all(
+        photos.map(
+          (src) =>
+            new Promise<{ src: string; ratio: number }>((resolve) => {
+              const img = new window.Image();
+              img.onload = () => {
+                const ratio = img.naturalHeight / img.naturalWidth || 1;
+                resolve({ src, ratio });
+              };
+              img.onerror = () => resolve({ src, ratio: 1 });
+              img.src = src;
+            })
+        )
+      );
+
+      if (!cancelled) {
+        setPhotoMeta(entries);
+      }
+    };
+
+    loadMeta();
+    return () => {
+      cancelled = true;
+    };
+  }, [isMobile]);
+
+  // Простая балансировка по текущей суммарной высоте колонок
+  useEffect(() => {
+    if (isMobile || photoMeta.length === 0) return;
+
+    const cols: ColumnItem[][] = Array.from({ length: columnsCount }, () => []);
+    const heightsRatio = Array(columnsCount).fill(0);
+    const heightsPx = Array(columnsCount).fill(0);
+
+    const gapPx = 12; // gap-3 ~ 12px
+    const containerWidth = desktopContainerRef.current?.clientWidth || 0;
+    const colWidth = containerWidth
+      ? (containerWidth - gapPx * (columnsCount - 1)) / columnsCount
+      : 0;
+
+    photoMeta.forEach(({ src, ratio }) => {
+      let target = 0;
+      for (let i = 1; i < columnsCount; i++) {
+        if (heightsRatio[i] < heightsRatio[target]) target = i;
+      }
+
+      const alreadyHasItems = cols[target].length > 0;
+      if (alreadyHasItems) {
+        heightsPx[target] += gapPx;
+      }
+
+      cols[target].push({ src, ratio });
+      heightsRatio[target] += ratio;
+      heightsPx[target] += colWidth ? ratio * colWidth : ratio;
+    });
+
+    setDesktopColumns(cols);
+  }, [isMobile, photoMeta, columnsCount]);
 
   return (
     <section id="gallery" className="pt-20 md:pt-28 px-5 md:px-6 relative">
@@ -142,14 +210,36 @@ export default function GallerySection() {
           </div>
         </div>
 
-        {/* Десктопная версия - Masonry Grid */}
-        <div className="hidden md:block">
-          <ResponsiveMasonry columnsCountBreakPoints={{ 768: 3, 1024: 4 }}>
-            <Masonry gutter="10px">
+        {/* Десктопная версия - сбалансированные колонки */}
+        <div className="hidden md:block" ref={desktopContainerRef}>
+          {desktopColumns.length > 0 ? (
+            <div className="flex gap-3">
+              {desktopColumns.map((col, colIdx) => (
+                <div key={colIdx} className="flex-1 flex flex-col gap-3">
+                  {col.map((item, index) => (
+                    <div
+                      key={`${item.src}-${index}`}
+                      className="relative w-full rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]"
+                    >
+                      <Image
+                        src={item.src}
+                        alt={`Sailing adventure ${index + 1}`}
+                        width={600}
+                        height={800}
+                        className="w-full h-auto object-cover"
+                        sizes="(max-width: 1024px) 33vw, 25vw"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-3">
               {photos.map((photo, index) => (
                 <div
                   key={index}
-                  className="relative w-full rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]"
+                  className="relative w-full rounded-lg overflow-hidden shadow-lg"
                 >
                   <Image
                     src={photo}
@@ -161,8 +251,8 @@ export default function GallerySection() {
                   />
                 </div>
               ))}
-            </Masonry>
-          </ResponsiveMasonry>
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function CaptainSection() {
   return (
@@ -9,11 +9,11 @@ export default function CaptainSection() {
       <div
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{
-          backgroundImage: 'url(/images/paper-texture.png)',
-          backgroundRepeat: 'repeat',
-          backgroundSize: 'auto',
+          backgroundImage: "url(/images/paper-texture.png)",
+          backgroundRepeat: "repeat",
+          backgroundSize: "auto",
           opacity: 0.4,
-          mixBlendMode: 'multiply',
+          mixBlendMode: "multiply",
         }}
       />
 
@@ -23,17 +23,17 @@ export default function CaptainSection() {
           <div className="inline-block">
             <h2
               className="font-cormorant font-light tracking-wide"
-              style={{ fontSize: 'clamp(38px, 8vw, 52px)' }}
+              style={{ fontSize: "clamp(38px, 8vw, 52px)" }}
             >
               КАПИТАН
             </h2>
             <div
               className="mt-2"
               style={{
-                width: '100%',
-                height: '2px',
+                width: "100%",
+                height: "2px",
                 background:
-                  'linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 20%, rgba(255,255,255,0.4) 80%, transparent)',
+                  "linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 20%, rgba(255,255,255,0.4) 80%, transparent)",
               }}
             ></div>
           </div>
@@ -42,22 +42,25 @@ export default function CaptainSection() {
         <div className="max-w-7xl mx-auto px-5 md:px-6">
           <div className="grid md:grid-cols-2 gap-0 items-stretch rounded-xl overflow-hidden shadow-2xl">
             {/* Text Content */}
-            <div className="bg-[#1a3940]/85 backdrop-blur-sm p-8 md:p-14 flex flex-col justify-center relative border border-white/10">
+            <div className="order-2 md:order-1 bg-[#1a3940]/85 backdrop-blur-sm p-8 md:p-14 flex flex-col justify-center relative border border-white/10">
               {/* Paper texture overlay for text background */}
               <div
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 style={{
-                  backgroundImage: 'url(/images/paper-texture.png)',
-                  backgroundRepeat: 'repeat',
-                  backgroundSize: 'auto',
+                  backgroundImage: "url(/images/paper-texture.png)",
+                  backgroundRepeat: "repeat",
+                  backgroundSize: "auto",
                   opacity: 0.4,
-                  mixBlendMode: 'multiply',
+                  mixBlendMode: "multiply",
                 }}
               />
 
               <div
                 className="space-y-5 text-white/85 relative z-10 font-manrope font-light leading-relaxed"
-                style={{ fontSize: 'clamp(16px, 3.5vw, 17px)', lineHeight: 1.75 }}
+                style={{
+                  fontSize: "clamp(16px, 3.5vw, 17px)",
+                  lineHeight: 1.75,
+                }}
               >
                 <p>Привет! Я Настя.</p>
                 <p>
@@ -146,7 +149,7 @@ export default function CaptainSection() {
             </div>
 
             {/* Captain Image */}
-            <div className="relative overflow-hidden min-h-[450px] md:min-h-[600px]">
+            <div className="order-1 md:order-2 relative overflow-hidden min-h-[450px] md:min-h-[600px]">
               <Image
                 src="/images/213bf474dd429393e049ac27f8ee451fa8ca1674.png"
                 alt="Captain"
@@ -158,11 +161,11 @@ export default function CaptainSection() {
               <div
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 style={{
-                  backgroundImage: 'url(/images/paper-texture.png)',
-                  backgroundRepeat: 'repeat',
-                  backgroundSize: 'auto',
+                  backgroundImage: "url(/images/paper-texture.png)",
+                  backgroundRepeat: "repeat",
+                  backgroundSize: "auto",
                   opacity: 0.4,
-                  mixBlendMode: 'multiply',
+                  mixBlendMode: "multiply",
                 }}
               />
             </div>
