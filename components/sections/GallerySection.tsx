@@ -1,17 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
-
-const ResponsiveMasonry = dynamic(
-  () => import("react-responsive-masonry").then((mod) => mod.ResponsiveMasonry),
-  { ssr: false }
-);
-
-const Masonry = dynamic(
-  () => import("react-responsive-masonry").then((mod) => mod.default),
-  { ssr: false }
-);
+import { useEffect, useState } from "react";
 
 const photos = [
   "/images/abb83e2ba131e055681fb6d9d526cc2cfddb2dad.png",
@@ -34,7 +24,59 @@ const photos = [
   "/images/55eca80d5f1b5270334a45fc9636ef2306ee4375.png",
 ];
 
+// Статичная сетка с фиксированными размерами для каждой позиции
+const gridLayout = [
+  { size: "tall", span: "row-span-2" }, // 0: высокая
+  { size: "square", span: "row-span-1" }, // 1: квадратная
+  { size: "tall", span: "row-span-2" }, // 2: высокая
+  { size: "square", span: "row-span-1" }, // 3: квадратная
+  { size: "wide", span: "row-span-1" }, // 4: широкая
+  { size: "square", span: "row-span-1" }, // 5: квадратная
+  { size: "tall", span: "row-span-2" }, // 6: высокая
+  { size: "square", span: "row-span-1" }, // 7: квадратная
+  { size: "square", span: "row-span-1" }, // 8: квадратная
+];
+
+const ROTATION_INTERVAL = 4000; // Меняем каждые 4 секунды
+
 export default function GallerySection() {
+  const [photoIndices, setPhotoIndices] = useState(() =>
+    Array.from({ length: gridLayout.length }, (_, i) => i % photos.length)
+  );
+  const [lastChangedPosition, setLastChangedPosition] = useState<number | null>(
+    null
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhotoIndices((prev) => {
+        const newIndices = [...prev];
+        let positionToChange;
+
+        // Выбираем позицию, отличную от последней измененной
+        do {
+          positionToChange = Math.floor(Math.random() * gridLayout.length);
+        } while (
+          positionToChange === lastChangedPosition &&
+          gridLayout.length > 1
+        );
+
+        setLastChangedPosition(positionToChange);
+
+        let newPhotoIndex;
+        // Находим фото, которое не отображается сейчас
+        do {
+          newPhotoIndex = Math.floor(Math.random() * photos.length);
+        } while (newIndices.includes(newPhotoIndex));
+
+        newIndices[positionToChange] = newPhotoIndex;
+        return newIndices;
+      });
+    }, ROTATION_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [lastChangedPosition]);
+
   return (
     <section id="gallery" className="pt-20 md:pt-28 px-5 md:px-6 relative">
       {/* Paper texture overlay */}
@@ -50,28 +92,28 @@ export default function GallerySection() {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Masonry Grid */}
-        <ResponsiveMasonry
-          columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1200: 4 }}
-        >
-          <Masonry gutter="8px">
-            {photos.map((photo, index) => (
+        {/* Статичная CSS Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] gap-3 md:gap-4">
+          {gridLayout.map((cell, position) => {
+            const photoIndex = photoIndices[position];
+
+            return (
               <div
-                key={index}
-                className="relative w-full rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                key={`cell-${position}`}
+                className={`relative ${cell.span} rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 group`}
               >
                 <Image
-                  src={photo}
-                  alt={`Sailing adventure ${index + 1}`}
-                  width={600}
-                  height={800}
-                  className="w-full h-auto"
-                  sizes="(max-width: 750px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                  key={`photo-${photoIndex}`}
+                  src={photos[photoIndex]}
+                  alt={`Sailing adventure ${photoIndex + 1}`}
+                  fill
+                  className="object-cover group-hover:scale-105 animate-fadeIn"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </div>
-            ))}
-          </Masonry>
-        </ResponsiveMasonry>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
