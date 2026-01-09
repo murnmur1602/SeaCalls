@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useState } from "react";
 import { ParallaxProvider } from "react-scroll-parallax";
 import Footer from "./Footer";
@@ -13,19 +12,8 @@ import GallerySection from "./sections/GallerySection";
 import HeroSection from "./sections/HeroSection";
 import TripsSection from "./sections/TripsSection";
 
-// Dynamic import for TripDetail to optimize bundle
-const TripDetail = dynamic(() => import("./TripDetail"), {
-  ssr: false,
-});
-
 export default function FinalConcept() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedTrip, setSelectedTrip] = useState<number | null>(null);
-
-  // Show trip detail page if a trip is selected
-  if (selectedTrip === 1) {
-    return <TripDetail onBack={() => setSelectedTrip(null)} />;
-  }
 
   return (
     <ParallaxProvider>
@@ -40,7 +28,7 @@ export default function FinalConcept() {
         <HeroSection />
         <AboutSection />
         <GallerySection />
-        <TripsSection setSelectedTrip={setSelectedTrip} />
+        <TripsSection />
         <CaptainSection />
         <FAQSection />
         <ContactsSection />

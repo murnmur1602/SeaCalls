@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Menu, X } from 'lucide-react';
-import Link from 'next/link';
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
 
 interface NavigationProps {
   menuOpen: boolean;
@@ -59,7 +59,9 @@ export default function Navigation({ menuOpen, setMenuOpen }: NavigationProps) {
         {/* Desktop CTA Button */}
         <div className="hidden md:flex justify-end">
           <a
-            href="#contacts"
+            href="https://t.me/nastyabulygina"
+            target="_blank"
+            rel="noopener noreferrer"
             className="border border-white/30 hover:border-white/50 hover:bg-white/5 px-5 rounded-full transition-all md:mr-16 font-dmSans text-base font-normal h-[34px] leading-[32px] inline-flex items-center"
           >
             Написать капитану
@@ -67,7 +69,11 @@ export default function Navigation({ menuOpen, setMenuOpen }: NavigationProps) {
         </div>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden p-1" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+        <button
+          className="md:hidden p-1"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
           {menuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
         </button>
       </div>
@@ -112,7 +118,9 @@ export default function Navigation({ menuOpen, setMenuOpen }: NavigationProps) {
               Контакты
             </a>
             <a
-              href="#contacts"
+              href="https://t.me/nastyabulygina"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
               className="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-6 py-3.5 rounded-full transition-all text-center mt-3 font-dmSans text-base font-normal"
             >
