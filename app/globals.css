@@ -32,8 +32,15 @@
     @apply border-border;
   }
 
+  html,
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+  }
+
+  body {
+    position: relative;
   }
 }
 
