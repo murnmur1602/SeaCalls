@@ -1,43 +1,108 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
-interface HeroSectionProps {
-  scrollY: number;
-}
+export default function HeroSection() {
+  const [enableParallax, setEnableParallax] = useState(false);
+  const bgRef = useRef<HTMLDivElement>(null);
 
-export default function HeroSection({ scrollY }: HeroSectionProps) {
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const update = () => {
+      setEnableParallax(!media.matches);
+    };
+
+    update();
+    media.addEventListener("change", update);
+
+    return () => {
+      media.removeEventListener("change", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enableParallax) {
+      if (bgRef.current) {
+        bgRef.current.style.transform = "translate3d(0,0,0)";
+      }
+      return;
+    }
+
+    let target = window.scrollY;
+    let current = target;
+    let raf = 0;
+
+    const onScroll = () => {
+      target = window.scrollY;
+    };
+
+    const tick = () => {
+      // Лёгкое сглаживание для iOS, чтобы не дёргалось при замедлении
+      current += (target - current) * 0.08;
+      const y = current * 0.15; // скорость параллакса
+      if (bgRef.current) {
+        bgRef.current.style.transform = `translate3d(0, ${y}px, 0)`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [enableParallax]);
+
+  const Background = ({ children }: { children: React.ReactNode }) =>
+    enableParallax ? (
+      <div
+        ref={bgRef}
+        className="absolute inset-0 will-change-transform"
+        style={{ transform: "translateZ(0)" }}
+      >
+        {children}
+      </div>
+    ) : (
+      <div
+        className="absolute inset-0 will-change-transform"
+        style={{ transform: "translateZ(0)" }}
+      >
+        {children}
+      </div>
+    );
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background with parallax effect */}
-      <div
-        className="absolute inset-0"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-      >
-        <Image
-          src="/images/412ee3ed42d4d2bed6f86e0f0d951171a52fa935.png"
-          alt="Sailing yacht at sea"
-          fill
-          className="object-cover object-[55%_center] md:object-center"
-          priority
-          quality={95}
-          sizes="100vw"
-        />
-
-        {/* Paper texture overlay */}
-        <div
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{
-            backgroundImage: "url(/images/paper-texture.png)",
-            backgroundRepeat: "repeat",
-            backgroundSize: "auto",
-            opacity: 0.4,
-            mixBlendMode: "multiply",
-          }}
-        />
-      </div>
+      {/* Background with parallax effect (disabled on mobile / reduced motion) */}
+      <Background>
+        <div className="relative w-full h-full">
+          <picture>
+            <source srcSet="/images/hero.avif" type="image/avif" />
+            <source srcSet="/images/hero.webp" type="image/webp" />
+            <img
+              src="/images/hero.webp"
+              alt="Sailing yacht at sea"
+              className="w-full h-full object-cover object-[55%_center] md:object-center"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
+          <div
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            style={{
+              backgroundImage: "url(/images/paper-texture.png)",
+              backgroundRepeat: "repeat",
+              backgroundSize: "auto",
+              opacity: 0.4,
+              mixBlendMode: "multiply",
+            }}
+          />
+        </div>
+      </Background>
 
       {/* Content */}
       <div
